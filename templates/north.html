@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content=60>
+    <title>North Station Commuter Rail Board</title>
+</head>
+<body>
+<h1>North Station</h1>
+<h2></h2>
+<script src="../static/js/board.js"></script>
+<table>
+<tr>
+    <th>Time</th>
+    <th>Destination</th>
+    <th>Train#</th>
+    <th>Track#</th>
+    <th>Status</th>
+</tr>
+{% for i in range(0, length) %}
+    {% if predictions[i].status != "Departed" %}
+        <tr>
+            <td>{{ predictions[i].departure_time }}</td>
+            <td>{{ trips_by_id[predictions[i].trip_id].headsign }}</td>
+            <td>{{ trips_by_id[predictions[i].trip_id].name }}</td>
+            <td>
+                {% if predictions[i].track_id %}
+                    {{ predictions[i].track_id }}
+                {% else %}
+                    TBD
+                {% endif %}
+            </td>
+            <td>{{ predictions[i].status }}</td>
+        </tr>
+    {% endif %}
+
+{%endfor%}
+
+</table>
+</body>
+</html>
