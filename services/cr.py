@@ -3,19 +3,18 @@ import requests
 import config
 from models.prediction import Prediction
 from models.route import Route
+from models.stop import Stop
 from models.trip import Trip
 
 
 class CommuterRailService:
     def __init__(self):
-        self.routes = self.fetch_routes()
-        self.route_ids = [r.id for r in self.routes]
+        pass
 
-    def routes_by_id(self):
-        if not self.routes:
-            self.routes = self.fetch_routes()
+    def fetch_routes_and_stop(self, stop_id):
+        routes, stop = self.fetch_routes(stop=stop_id)
 
-        return {route.id: route for route in self.routes}
+        return {route.id: route for route in routes}, stop
 
     @staticmethod
     def fetch(path, params):
@@ -24,21 +23,21 @@ class CommuterRailService:
         data = response.json()
         return data.get("data"), data.get("included")
 
-    def fetch_routes(self):
+    def fetch_routes(self, stop):
         params = {
-            "filter[stop]": config.Core.MBCR_GATEWAY,
+            "filter[stop]": stop,
             "filter[type]": 2,
-            "include": "stop"
+            "include": "stop",
         }
         routes, included = self.fetch(path="routes", params=params)
-        return [Route(r) for r in routes]
+        return [Route(r) for r in routes], Stop(included[0])
 
-    def fetch_predictions_and_trips(self):
+    def fetch_predictions_and_trips(self, route_ids):
         params = {
             "filter[stop]": config.Core.MBCR_GATEWAY,
             "filter[direction_id]": 0,
-            "filter[route]": ",".join(self.route_ids),
-            "include": "trip"
+            "filter[route]": ",".join(route_ids),
+            "include": "trip",
         }
 
         predictions, included = self.fetch(path="predictions", params=params)
@@ -50,4 +49,4 @@ class CommuterRailService:
                 trips_by_id[trip.id] = trip
             return [Prediction(p) for p in predictions], trips_by_id
         else:
-            return []
+            return [], {}

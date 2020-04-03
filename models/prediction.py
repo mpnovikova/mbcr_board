@@ -8,7 +8,9 @@ class Prediction(MBTADataModel):
     @property
     def departure_time(self):
         if self.attributes.get("departure_time"):
-            departure_time = datetime.strptime(self.attributes.get("departure_time"), self.DATE_FORMAT)
+            departure_time = datetime.strptime(
+                self.attributes.get("departure_time"), self.DATE_FORMAT
+            )
             return departure_time.strftime("%I:%M %p")
         else:
             return None

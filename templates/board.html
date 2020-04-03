@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content=60>
-    <title>North Station Commuter Rail Board</title>
+    <title>{{ stop.name }} Commuter Rail Board</title>
 </head>
 <body>
-<h1>North Station</h1>
-<h2></h2>
+<h1>{{ stop.name }}</h1>
+<h2>{{ date }}{{ time }}</h2>
 <script src="../static/js/board.js"></script>
 <table>
 <tr>
@@ -34,7 +34,7 @@
         </tr>
     {% endif %}
 
-{%endfor%}
+{% endfor %}
 
 </table>
 </body>
