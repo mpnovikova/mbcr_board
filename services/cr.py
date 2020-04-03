@@ -32,9 +32,9 @@ class CommuterRailService:
         routes, included = self.fetch(path="routes", params=params)
         return [Route(r) for r in routes], Stop(included[0])
 
-    def fetch_predictions_and_trips(self, route_ids):
+    def fetch_predictions_and_trips(self, route_ids, stop_id):
         params = {
-            "filter[stop]": config.Core.MBCR_GATEWAY,
+            "filter[stop]": stop_id,
             "filter[direction_id]": 0,
             "filter[route]": ",".join(route_ids),
             "include": "trip",

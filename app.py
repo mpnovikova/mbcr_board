@@ -16,7 +16,10 @@ def board(stop_id):
         raise ApiError("Invalid stop", 400)
 
     routes_by_id, stop = cr_service.fetch_routes_and_stop(stop_id)
-    predictions, trips_by_id = cr_service.fetch_predictions_and_trips(routes_by_id.keys())
+    predictions, trips_by_id = cr_service.fetch_predictions_and_trips(
+        routes_by_id.keys(),
+        stop_id
+    )
     length = len(predictions)
     now = datetime.now()
 
